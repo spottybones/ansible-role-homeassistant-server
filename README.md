@@ -1,3 +1,4 @@
-# Ansible Role Template
+# Ansible Role for Home Assistant Server
 
-This repository is used a template repository for creating new Ansible roles.
+This role is used to set up a Home Assistant home automation server. The
+server runs components in Docker containers via docker-compose.
