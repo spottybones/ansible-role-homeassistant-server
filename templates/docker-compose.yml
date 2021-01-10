@@ -1,0 +1,21 @@
+---
+version: '3'
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: {{ homeassistant_image }}
+    volumes:
+      - {{ homeassistant_config_volume }}
+    environment:
+      - TZ={{ host_timezone }}
+    restart: always
+    network_mode: host
+  eclipse-mosquitto:
+    container_name: mosquitto
+    image: {{ mosquitto_image }}
+    volumes:
+      - {{ mosquitto_config_volume }}
+    environment:
+      - TZ={{ host_timezone }}
+    restart: always
+    network_mode: host
