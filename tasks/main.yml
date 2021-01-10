@@ -1,2 +1,112 @@
 ---
-# tasks/main.yml
+# General Server Setup
+- name: Set System Hostname
+  become: true
+  hostname:
+    name: "{{inventory_hostname}}"
+    use: systemd
+
+- name: "Set timezone to {{ host_timezone }}"
+  become: true
+  community.general.timezone:
+    hwclock: UTC
+    name: "{{ host_timezone }}"
+
+- name: Set Locale to en_US.UTF-8
+  become: true
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: Add Entry for IP Address in /etc/hosts
+  become: true
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "(^|\\W){{inventory_hostname}}(\\W|$)"
+    line: "{{ansible_host}} {{inventory_hostname}} {{inventory_hostname.split('.')[0]}}"
+    state: present
+
+# Set up for HomeAssistant
+- name: Install Required Packages
+  become: true
+  package:
+    name:
+      - git
+      - docker.io
+      - docker-compose
+    state: latest
+    update_cache: true
+
+- name: Enable Required Services
+  become: true
+  service:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Ensure group "homeassistant" exists
+  become: true
+  group:
+    name: homeassistant
+    state: present
+
+- name: User to run server
+  become: true
+  user:
+    append: yes
+    comment: HomeAssistant User
+    create_home: true
+    group: homeassistant
+    groups: docker
+    home: /home/homeassistant
+    name: homeassistant
+    skeleton: /etc/skel
+    state: present
+    shell: /bin/bash
+
+- name: SSH Key for Access to Current User
+  become: true
+  ansible.posix.authorized_key:
+    user: homeassistant
+    state: present
+    key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: Docker-compose File for Home Assistant container startup
+  become: true
+  template:
+    src: templates/docker-compose.yml
+    dest: /home/homeassistant/docker-compose.yml
+    owner: homeassistant
+    group: homeassistant
+    mode: "0644"
+
+- name: Ensure Configuration Directory Exists for Home Assistant
+  become: true
+  ansible.builtin.file:
+    path: /home/homeassistant/.homeassistant
+    state: directory
+    owner: homeassistant
+    group: homeassistant
+    mode: "0750"
+
+- name: Ensure Configuration Directories Exist for Eclipse-Mosquitto
+  become: true
+  ansible.builtin.file:
+    path: "/home/homeassistant/.mosquitto/{{item}}"
+    state: directory
+    owner: "1883"
+    group: "1883"
+    mode: "0750"
+  loop:
+    - config
+    - data
+    - log
+
+- name: Install Basic Mosquitto Configuration
+  become: true
+  ansible.builtin.copy:
+    src: files/mosquitto.conf
+    dest: /home/homeassistant/.mosquitto/config/mosquitto.conf
+    owner: "1883"
+    group: "1883"
+    mode: "0644"
