@@ -1,2 +1,12 @@
 ---
-# defaults/main.yml
+# Default Docker Image and Configuration Direcotory Location for Home Assisant
+homeassistant_image: homeassistant/home-assistant:stable
+homeassistant_config_volume: /home/homeassistant/.homeassistant:/config
+
+# Default Docker Image and Configuration Direcotory Location for the
+# Eclipse Mosquitto MQTT Broker
+mosquitto_image: eclipse-mosquitto:latest
+mosquitto_config_volume: /home/homeassistant/.mosquitto:/mosquitto
+
+# Default Timezone for My Home Assistant Servers
+host_timezone: America/New_York
