@@ -57,7 +57,9 @@
     comment: HomeAssistant User
     create_home: true
     group: homeassistant
-    groups: docker
+    groups:
+      - docker
+      - dialout
     home: /home/homeassistant
     name: homeassistant
     skeleton: /etc/skel
@@ -110,3 +112,6 @@
     owner: "1883"
     group: "1883"
     mode: "0644"
+
+- name: deCONZ Configuration
+  import_tasks: deconz.yml

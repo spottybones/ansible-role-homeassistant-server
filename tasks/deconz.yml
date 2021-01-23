@@ -1,0 +1,11 @@
+---
+# tasks for installing deCONZ Zigbee adaptor support
+
+- name: Ensure Configuration Directory Exists for deCONZ
+  become: true
+  ansible.builtin.file:
+    path: /home/homeassistant/.config/deCONZ
+    state: directory
+    owner: homeassistant
+    group: homeassistant
+    mode: "0750"
