@@ -7,9 +7,11 @@ services:
     image: {{ homeassistant_image }}
     volumes:
       - {{ homeassistant_config_volume }}
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ={{ host_timezone }}
-    restart: always
+    restart: unless-stopped
+    priveleged: true
     network_mode: host
 
   eclipse-mosquitto:
