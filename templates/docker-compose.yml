@@ -13,7 +13,6 @@ services:
     environment:
       - TZ={{ host_timezone }}
     restart: unless-stopped
-    priveleged: true
     network_mode: host
 
   eclipse-mosquitto:
