@@ -66,13 +66,6 @@
     state: present
     shell: /bin/bash
 
-- name: SSH Key for Access to Current User
-  become: true
-  ansible.posix.authorized_key:
-    user: homeassistant
-    state: present
-    key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
-
 - name: Docker-compose File for Home Assistant container startup
   become: true
   template:
