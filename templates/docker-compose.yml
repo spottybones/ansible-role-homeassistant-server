@@ -8,6 +8,8 @@ services:
     volumes:
       - {{ homeassistant_config_volume }}
       - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/ttyUSB-ConbeeII:/dev/ttyUSB-ConbeeII
     environment:
       - TZ={{ host_timezone }}
     restart: unless-stopped
@@ -21,19 +23,5 @@ services:
       - {{ mosquitto_config_volume }}
     environment:
       - TZ={{ host_timezone }}
-    restart: always
-    network_mode: host
-
-  deconz:
-    container_name: deconz
-    image: {{ deconz_image }}
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - {{ deconz_config_dir }}:/root/.local/share/dresden-elektronik/deCONZ
-    devices:
-      - {{ deconz_device }}:{{ deconz_device }}
-    environment:
-      - TZ={{ host_timezone }}
-      - DECONZ_DEVICE={{ deconz_device }}
     restart: always
     network_mode: host

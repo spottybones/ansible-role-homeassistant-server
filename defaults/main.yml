@@ -8,11 +8,5 @@ homeassistant_config_volume: /home/homeassistant/.homeassistant:/config
 mosquitto_image: eclipse-mosquitto:latest
 mosquitto_config_volume: /home/homeassistant/.mosquitto:/mosquitto
 
-# Default Docker Image and Configuration Directory Location for the
-# deCONZ Zigbee Controller Software
-deconz_image: marthoc/deconz:stable
-deconz_config_dir: /home/homeassistant/.config/deCONZ
-deconz_device: /dev/ttyACM1
-
 # Default Timezone for My Home Assistant Servers
 host_timezone: America/New_York
