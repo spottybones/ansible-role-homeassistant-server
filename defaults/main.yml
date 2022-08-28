@@ -1,6 +1,6 @@
 ---
 # Default Docker Image and Configuration Direcotory Location for Home Assisant
-homeassistant_image: homeassistant/home-assistant:stable
+homeassistant_image: ghcr.io/home-assistant/home-assistant:stable
 homeassistant_config_volume: /home/homeassistant/.homeassistant:/config
 
 # Default Docker Image and Configuration Direcotory Location for the
