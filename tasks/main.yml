@@ -3,7 +3,7 @@
 - name: Set System Hostname
   become: true
   hostname:
-    name: "{{inventory_hostname}}"
+    name: "{{ ansible_host }}"
     use: systemd
 
 - name: "Set timezone to {{ host_timezone }}"
@@ -22,8 +22,8 @@
   become: true
   lineinfile:
     dest: /etc/hosts
-    regexp: "(^|\\W){{inventory_hostname}}(\\W|$)"
-    line: "{{ansible_host}} {{inventory_hostname}} {{inventory_hostname.split('.')[0]}}"
+    regexp: "(^|\\W){{ ansible_host }}(\\W|$)"
+    line: "{{ansible_default_ipv4.address}} {{ansible_host}} {{ansible_host.split('.')[0]}}"
     state: present
 
 # Set up for HomeAssistant
